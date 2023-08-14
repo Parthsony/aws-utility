@@ -27,7 +27,6 @@
                             <option value="ca-central-1">Canada (ca-central-1)</option>
                             <option value="me-south-1">Bahrain (me-south-1)</option>
                             <option value="af-south-1">Cape Town (af-south-1)</option>
-
                         </select>
                     </div>
                     <div class="form-group">
@@ -48,6 +47,7 @@
         var regionSelect = document.getElementById("region");
         var functionNameInput = document.getElementById("functionName");
         var generatedCommand = document.getElementById("generatedCommand");
+        var copyButton = document.getElementById("copyButton");
         
         regionSelect.addEventListener("change", updateGeneratedCommand);
         functionNameInput.addEventListener("input", updateGeneratedCommand);
@@ -59,21 +59,19 @@
             var command = `aws lambda delete-function --function-name ${functionName} --region ${region}`;
             generatedCommand.textContent = command;
         }
-        
-        document.getElementById("copyButton").addEventListener("click", function () {
-            var range = document.createRange();
-            range.selectNode(generatedCommand);
-            window.getSelection().addRange(range);
-            
-            try {
-                document.execCommand("copy");
-            } catch (err) {
-                console.error("Copy command failed:", err);
-            }
-            
-            window.getSelection().removeAllRanges();
+
+        copyButton.addEventListener("click", function () {
+            var commandText = generatedCommand.textContent;
+
+            var tempInput = document.createElement("textarea");
+            tempInput.value = commandText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            alert("Command copied to clipboard!");
         });
     </script>
 </body>
 </html>
-
