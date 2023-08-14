@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Lambda Deletion Command Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>AWS Lambda Deletion Command Generator</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <form>
+                    <div class="form-group">
+                        <label for="region">Select Region:</label>
+                        <select class="form-control" id="region" name="region">
+                            <option value="us-east-1">N. Virginia (us-east-1)</option>
+                            <option value="us-west-1">N. California (us-west-1)</option>
+                            <option value="us-west-2">Oregon (us-west-2)</option>
+                            <option value="eu-west-1">Ireland (eu-west-1)</option>
+                            <option value="eu-central-1">Frankfurt (eu-central-1)</option>
+                            <option value="eu-north-1">Stockholm (eu-north-1)</option>
+                            <option value="ap-southeast-1">Singapore (ap-southeast-1)</option>
+                            <option value="ap-southeast-2">Sydney (ap-southeast-2)</option>
+                            <option value="ap-northeast-1">Tokyo (ap-northeast-1)</option>
+                            <option value="ap-northeast-2">Seoul (ap-northeast-2)</option>
+                            <option value="sa-east-1">Sao Paulo (sa-east-1)</option>
+                            <option value="ca-central-1">Canada (ca-central-1)</option>
+                            <option value="me-south-1">Bahrain (me-south-1)</option>
+                            <option value="af-south-1">Cape Town (af-south-1)</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="functionName">Enter Function Name:</label>
+                        <input type="text" class="form-control" id="functionName" name="functionName">
+                    </div>
+                </form>
+                <div>
+                    <h4>Generated Command:</h4>
+                    <div class="alert alert-success" id="generatedCommand"></div>
+                    <button type="button" class="btn btn-secondary" id="copyButton">Copy Command</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var regionSelect = document.getElementById("region");
+        var functionNameInput = document.getElementById("functionName");
+        var generatedCommand = document.getElementById("generatedCommand");
+        
+        regionSelect.addEventListener("change", updateGeneratedCommand);
+        functionNameInput.addEventListener("input", updateGeneratedCommand);
+
+        function updateGeneratedCommand() {
+            var region = regionSelect.value;
+            var functionName = functionNameInput.value;
+            
+            var command = `aws lambda delete-function --function-name ${functionName} --region ${region}`;
+            generatedCommand.textContent = command;
+        }
+        
+        document.getElementById("copyButton").addEventListener("click", function () {
+            var range = document.createRange();
+            range.selectNode(generatedCommand);
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand("copy");
+            } catch (err) {
+                console.error("Copy command failed:", err);
+            }
+            
+            window.getSelection().removeAllRanges();
+        });
+    </script>
+</body>
+</html>
 
